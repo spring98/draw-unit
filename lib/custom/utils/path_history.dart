@@ -1,12 +1,14 @@
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/widgets.dart' hide Image;
 
 class MyPathHistory {
   final List<MapEntry<Path, Paint>> _paths = [];
   final Paint _backgroundPaint = Paint();
-  late Paint currentPaint;
   bool _inDrag = false;
+
+  // controller 의 update paint() 에서 초기화
+  // setDrawColor setBackgroundColor setThickness 이때 update paint() 호출
+  late Paint currentPaint;
 
   void setBackgroundColor(Color backgroundColor) {
     _backgroundPaint.color = backgroundColor;
@@ -55,24 +57,4 @@ class MyPathHistory {
       canvas.drawPath(path.key, path.value);
     }
   }
-}
-
-typedef PictureDetails PictureCallback();
-
-class PictureDetails {
-  final Picture picture;
-  final int width;
-  final int height;
-
-  const PictureDetails(this.picture, this.width, this.height);
-
-  Future<Image> toImage() {
-    return picture.toImage(width, height);
-  }
-
-// Uint8List toPNG() async {
-//   return (await toImage().toByteData(format: ImageByteFormat.png))
-//       .buffer
-//       .asUint8List();
-// }
 }

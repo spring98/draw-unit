@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:drawing_unit/custom/utils/path_history.dart';
 import 'package:flutter/material.dart';
+import 'package:drawing_unit/custom/example_page.dart';
 
 class MyPainterController extends ChangeNotifier {
   Color _drawColor = const Color.fromARGB(255, 0, 0, 0);
@@ -13,33 +14,42 @@ class MyPainterController extends ChangeNotifier {
   // painter 에서 초기화 됨
   late ValueGetter<Size> widgetFinish;
 
-  Color get drawColor => _drawColor;
-  set drawColor(Color color) {
+  Color getDrawColor() {
+    return _drawColor;
+  }
+
+  void setDrawColor(Color color) {
     _drawColor = color;
     _updatePaint();
   }
 
-  Color get backgroundColor => _backgroundColor;
-  set backgroundColor(Color color) {
+  Color getBackgroundColor() {
+    return _backgroundColor;
+  }
+
+  void setBackgroundColor(Color color) {
     _backgroundColor = color;
     _updatePaint();
   }
 
-  double get thickness => _thickness;
-  set thickness(double t) {
+  double getThickness() {
+    return _thickness;
+  }
+
+  void setThickness(double t) {
     _thickness = t;
     _updatePaint();
   }
 
   void _updatePaint() {
     Paint paint = Paint();
-    paint.color = drawColor;
+    paint.color = getDrawColor();
     paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = thickness;
+    paint.strokeWidth = getThickness();
     paint.strokeCap = StrokeCap.round;
     paint.strokeJoin = StrokeJoin.round;
     pathHistory.currentPaint = paint;
-    pathHistory.setBackgroundColor(backgroundColor);
+    pathHistory.setBackgroundColor(getBackgroundColor());
     notifyListeners();
   }
 

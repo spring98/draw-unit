@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+import 'dart:ui';
 import 'package:drawing_unit/custom/painter.dart';
+import 'package:drawing_unit/custom/utils/image_output.dart';
 import 'package:flutter/material.dart';
 import 'package:drawing_unit/custom/utils/draw_bar.dart';
-import 'PaintViewModel.dart';
+import 'PaintController.dart';
+import 'package:get/get.dart';
 
 class MyExamplePage extends StatefulWidget {
   @override
@@ -15,7 +19,7 @@ class _MyExamplePageState extends State<MyExamplePage> {
   @override
   void initState() {
     super.initState();
-    _controller.backgroundColor = Colors.white;
+    _controller.setBackgroundColor(Colors.white);
   }
 
   @override
@@ -23,7 +27,9 @@ class _MyExamplePageState extends State<MyExamplePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Hello232 Flutter'),
-        actions: [_action()],
+        actions: [
+          _action(),
+        ],
         bottom: PreferredSize(
           child: DrawBar(_controller),
           preferredSize: Size(MediaQuery.of(context).size.width, 30.0),
@@ -46,6 +52,7 @@ class _MyExamplePageState extends State<MyExamplePage> {
               setState(() {
                 _finished = false;
                 _controller = MyPainterController();
+                _controller.setBackgroundColor(Colors.white);
               });
             },
           ),
@@ -54,56 +61,40 @@ class _MyExamplePageState extends State<MyExamplePage> {
               icon: const Icon(Icons.undo),
               tooltip: 'Undo',
               onPressed: _controller.undo),
-
           IconButton(
               icon: const Icon(Icons.delete),
               tooltip: 'Clear',
               onPressed: _controller.clear),
-          // IconButton(
-          //     icon: const Icon(Icons.check),
-          //     onPressed: () => _show(_controller.finish(), context)),
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () async {
+              Uint8List thumb = await _controller.finish()!.toImage();
+              setState(() {
+                _finished = true;
+              });
+              Get.to(() => ImageOutput(thumb: thumb));
+            },
+          ),
           const SizedBox(width: 10),
         ]
       ],
     );
   }
+}
 
-  // void _show(PictureDetails picture, BuildContext context) {
-  //   setState(() {
-  //     _finished = true;
-  //   });
-  //   Navigator.of(context)
-  //       .push(MaterialPageRoute(builder: (BuildContext context) {
-  //     return Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('View your image'),
-  //       ),
-  //       body: Container(
-  //           alignment: Alignment.center,
-  //           child: FutureBuilder<Uint8List>(
-  //             future: picture.toPNG(),
-  //             builder:
-  //                 (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
-  //               switch (snapshot.connectionState) {
-  //                 case ConnectionState.done:
-  //                   if (snapshot.hasError) {
-  //                     return Text('Error: ${snapshot.error}');
-  //                   } else {
-  //                     return Image.memory(snapshot.data);
-  //                   }
-  //                   break;
-  //                 default:
-  //                   return Container(
-  //                       child: FractionallySizedBox(
-  //                     widthFactor: 0.1,
-  //                     child: const AspectRatio(
-  //                         aspectRatio: 1.0, child: CircularProgressIndicator()),
-  //                     alignment: Alignment.center,
-  //                   ));
-  //               }
-  //             },
-  //           )),
-  //     );
-  //   }));
-  // }
+typedef PictureCallback = PictureDetails Function();
+
+class PictureDetails {
+  final Picture picture;
+  final int width;
+  final int height;
+
+  const PictureDetails(this.picture, this.width, this.height);
+
+  Future<Uint8List> toImage() async {
+    var image = await picture.toImage(width, height);
+    ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+    return pngBytes;
+  }
 }
