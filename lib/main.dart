@@ -1,7 +1,6 @@
-import 'package:drawing_unit/draw_view.dart';
-import 'package:drawing_unit/open/example_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'custom/example_page.dart';
 
 void main() {
   runApp(
@@ -28,7 +27,7 @@ class _DrawUnitState extends State<DrawUnit> {
           children: [
             GestureDetector(
               onTap: () {
-                Get.to(() => ExamplePage());
+                Get.to(() => MyExamplePage());
               },
               child: Container(
                 width: 100,
