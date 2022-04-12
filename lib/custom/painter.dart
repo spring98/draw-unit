@@ -1,6 +1,5 @@
 import 'package:drawing_unit/custom/utils/painter_painter.dart';
 import 'package:flutter/material.dart';
-
 import 'PaintViewModel.dart';
 
 class MyPainter extends StatefulWidget {
@@ -19,15 +18,7 @@ class _MyPainterState extends State<MyPainter> {
   @override
   void initState() {
     super.initState();
-
     widget.painterController.widgetFinish = _finish;
-  }
-
-  Size _finish() {
-    setState(() {
-      _finished = true;
-    });
-    return context.size!;
   }
 
   @override
@@ -69,10 +60,21 @@ class _MyPainterState extends State<MyPainter> {
         .globalToLocal(update.globalPosition);
     widget.painterController.pathHistory.updateCurrent(pos);
     widget.painterController.setNotifyListeners();
+    // print('🏻🏻');
+    // print(pos);
   }
 
   void _onPanEnd(DragEndDetails end) {
     widget.painterController.pathHistory.endCurrent();
     widget.painterController.setNotifyListeners();
+    // print('👇🏻');
+    // print(context.size!);
+  }
+
+  Size _finish() {
+    setState(() {
+      _finished = true;
+    });
+    return context.size!;
   }
 }

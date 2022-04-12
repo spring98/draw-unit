@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:drawing_unit/custom/painter.dart';
 import 'package:drawing_unit/custom/utils/path_history.dart';
 import 'package:flutter/material.dart';
 
@@ -9,13 +7,11 @@ class MyPainterController extends ChangeNotifier {
   Color _backgroundColor = const Color.fromARGB(255, 255, 255, 255);
 
   double _thickness = 1.0;
-  late PictureDetails _cached;
-  late MyPathHistory pathHistory;
-  late ValueGetter<Size> widgetFinish;
+  PictureDetails? _cached;
+  final MyPathHistory pathHistory = MyPathHistory();
 
-  MyPainterController() {
-    pathHistory = MyPathHistory();
-  }
+  // painter 에서 초기화 됨
+  late ValueGetter<Size> widgetFinish;
 
   Color get drawColor => _drawColor;
   set drawColor(Color color) {
@@ -65,7 +61,7 @@ class MyPainterController extends ChangeNotifier {
     }
   }
 
-  PictureDetails finish() {
+  PictureDetails? finish() {
     if (!isFinished()) {
       _cached = _render(widgetFinish());
     }

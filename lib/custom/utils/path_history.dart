@@ -3,16 +3,10 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart' hide Image;
 
 class MyPathHistory {
-  late List<MapEntry<Path, Paint>> _paths;
+  final List<MapEntry<Path, Paint>> _paths = [];
+  final Paint _backgroundPaint = Paint();
   late Paint currentPaint;
-  late Paint _backgroundPaint;
-  late bool _inDrag;
-
-  MyPathHistory() {
-    _paths = [];
-    _inDrag = false;
-    _backgroundPaint = Paint();
-  }
+  bool _inDrag = false;
 
   void setBackgroundColor(Color backgroundColor) {
     _backgroundPaint.color = backgroundColor;
@@ -30,6 +24,7 @@ class MyPathHistory {
     }
   }
 
+  // GestureDetector onPanStart
   void add(Offset startPoint) {
     if (!_inDrag) {
       _inDrag = true;
@@ -39,13 +34,16 @@ class MyPathHistory {
     }
   }
 
+  // GestureDetector _onPanUpdate
   void updateCurrent(Offset nextPoint) {
     if (_inDrag) {
+      // 제일 마지막으로 저장된 path(위의 add 로 추가한 path)
       Path path = _paths.last.key;
       path.lineTo(nextPoint.dx, nextPoint.dy);
     }
   }
 
+  // GestureDetector _onPanEnd
   void endCurrent() {
     _inDrag = false;
   }
