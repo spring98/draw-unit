@@ -10,22 +10,12 @@ class MyExamplePage extends StatefulWidget {
 
 class _MyExamplePageState extends State<MyExamplePage> {
   bool _finished = false;
-  late MyPainterController _controller;
+  MyPainterController _controller = MyPainterController();
 
   @override
   void initState() {
     super.initState();
-
-    _controller = _newController();
-  }
-
-  MyPainterController _newController() {
-    MyPainterController controller = MyPainterController();
-
-    controller.thickness = 2.0;
-
-    controller.backgroundColor = Colors.white;
-    return controller;
+    _controller.backgroundColor = Colors.white;
   }
 
   @override
@@ -55,7 +45,7 @@ class _MyExamplePageState extends State<MyExamplePage> {
             onPressed: () {
               setState(() {
                 _finished = false;
-                _controller = _newController();
+                _controller = MyPainterController();
               });
             },
           ),
