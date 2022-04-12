@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:drawing_unit/custom/utils/color_picker_button.dart';
-import '../PaintViewModel.dart';
+import '../PaintController.dart';
 
 class DrawBar extends StatelessWidget {
   final MyPainterController _controller;
@@ -17,14 +17,14 @@ class DrawBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Center(
-                  child: Text(_controller.thickness.toStringAsPrecision(2),
+                  child: Text(_controller.getThickness().toStringAsPrecision(2),
                       style: const TextStyle(color: Colors.white))),
               Flexible(
                 child: Slider(
-                  value: _controller.thickness,
+                  value: _controller.getThickness(),
                   onChanged: (double value) {
                     setState(() {
-                      _controller.thickness = value;
+                      _controller.setThickness(value);
                     });
                   },
                   min: 1.0,

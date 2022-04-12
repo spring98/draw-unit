@@ -1,6 +1,6 @@
 import 'package:drawing_unit/custom/utils/painter_painter.dart';
 import 'package:flutter/material.dart';
-import 'PaintViewModel.dart';
+import 'PaintController.dart';
 
 class MyPainter extends StatefulWidget {
   final MyPainterController painterController;
@@ -13,39 +13,28 @@ class MyPainter extends StatefulWidget {
 }
 
 class _MyPainterState extends State<MyPainter> {
-  bool _finished = false;
-
   @override
   void initState() {
     super.initState();
-    widget.painterController.widgetFinish = _finish;
+    initSize();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: _child(),
-      width: double.infinity,
-      height: double.infinity,
-    );
-  }
-
-  Widget _child() {
-    Widget child = CustomPaint(
-      willChange: true,
-      painter: MyPainterPainter(widget.painterController.pathHistory,
-          repaint: widget.painterController),
-    );
-    child = ClipRect(child: child);
-    if (!_finished) {
-      child = GestureDetector(
-        child: child,
+      child: GestureDetector(
+        child: CustomPaint(
+          willChange: true,
+          painter: MyPainterPainter(widget.painterController.pathHistory,
+              repaint: widget.painterController),
+        ),
         onPanStart: _onPanStart,
         onPanUpdate: _onPanUpdate,
         onPanEnd: _onPanEnd,
-      );
-    }
-    return child;
+      ),
+      width: double.infinity,
+      height: double.infinity,
+    );
   }
 
   void _onPanStart(DragStartDetails start) {
@@ -60,21 +49,15 @@ class _MyPainterState extends State<MyPainter> {
         .globalToLocal(update.globalPosition);
     widget.painterController.pathHistory.updateCurrent(pos);
     widget.painterController.setNotifyListeners();
-    // print('🏻🏻');
-    // print(pos);
   }
 
   void _onPanEnd(DragEndDetails end) {
     widget.painterController.pathHistory.endCurrent();
     widget.painterController.setNotifyListeners();
-    // print('👇🏻');
-    // print(context.size!);
   }
 
-  Size _finish() {
-    setState(() {
-      _finished = true;
-    });
-    return context.size!;
+  // print('🏻👇🏻');
+  void initSize() {
+    widget.painterController.widgetFinish = () => context.size!;
   }
 }

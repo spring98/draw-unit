@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'package:drawing_unit/paint.dart';
+import 'package:drawing_unit/self/paint.dart';
 import 'package:flutter/material.dart';
 
 class Draw extends StatefulWidget {
