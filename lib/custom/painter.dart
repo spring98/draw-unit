@@ -18,6 +18,7 @@ class _MyPainterState extends State<MyPainter> {
     super.initState();
     initSize();
   }
+  // painter update
 
   @override
   Widget build(BuildContext context) {
